@@ -5,6 +5,7 @@
  */
 package com.github.bennyl.jml.core;
 
+import com.github.bennyl.jml.core.storage.DoubleStorage;
 import com.github.bennyl.jml.utils.count.BoundedCounter;
 import com.google.common.reflect.TypeToken;
 import java.io.File;
@@ -16,7 +17,7 @@ import java.io.OutputStream;
  *
  * @author bennyl
  */
-public interface Dataset extends Context {
+public interface Dataset extends Context, DoubleStorage {
 
     default <P extends LearnerParams<M>, M extends Model, L extends Learner<P, M>> P learn(Class<L> learnerType) {
         TypeToken learnerTypeToken = TypeToken.of(learnerType);
@@ -60,33 +61,7 @@ public interface Dataset extends Context {
         return sum;
     }
 
-    void put(int index, double value);
-
-    /**
-     * @return the total number of cells in the dataset
-     */
-    int size();
-
-    /**
-     * @param dimension
-     * @return the amount of cells in the given dimension
-     */
-    default int size(int dimension) {
-        return shape()[dimension];
-    }
-
-    /**
-     * @return the number of dimensions in this dataset
-     */
-    default int dimensions() {
-        return shape().length;
-    }
-
-    double get(int i);
-
-    double get(int i, int j);
-
-    double get(int... pos);
+    
 
     void save(OutputStream out) throws IOException;
 
@@ -96,6 +71,5 @@ public interface Dataset extends Context {
         }
     }
 
-    int[] shape();
 
 }

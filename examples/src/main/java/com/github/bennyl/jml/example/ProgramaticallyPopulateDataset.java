@@ -6,7 +6,8 @@
 package com.github.bennyl.jml.example;
 
 import com.github.bennyl.jml.core.Dataset;
-import com.github.bennyl.jml.core.impl.ds.ByteBufferDataset;
+import com.github.bennyl.jml.core.impl.ds.SimpleDataset;
+import com.github.bennyl.jml.core.impl.storage.DoubleArrayStorage;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ProgramaticallyPopulateDataset {
 
     public static void main(String[] args) {
         int n = 10000000;
-        Dataset dataset = new ByteBufferDataset(n);
+        Dataset dataset = new SimpleDataset(new DoubleArrayStorage(new double[n]));
 
         for (int i = 0; i < dataset.size(); i++) {
             dataset.put(i, i);

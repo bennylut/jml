@@ -6,7 +6,8 @@
 package com.github.bennyl.jml.example;
 
 import com.github.bennyl.jml.core.Dataset;
-import com.github.bennyl.jml.core.impl.ds.ByteBufferDataset;
+import com.github.bennyl.jml.core.impl.ds.SimpleDataset;
+import com.github.bennyl.jml.core.impl.storage.DoubleArrayStorage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.io.IOException;
 public class SaveAndLoadDataset {
 
     public static void main(String[] args) throws IOException {
-        Dataset dataset = new ByteBufferDataset(100);
+        Dataset dataset = new SimpleDataset(new DoubleArrayStorage(new double[100]));
         for (int i = 0; i < dataset.size(); i++) {
             dataset.put(i, i);
         }
@@ -30,7 +31,7 @@ public class SaveAndLoadDataset {
         out.close();
 
         ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        dataset = ByteBufferDataset.load(in);
+        dataset = SimpleDataset.load(in);
 
         double after = dataset.sum();
 

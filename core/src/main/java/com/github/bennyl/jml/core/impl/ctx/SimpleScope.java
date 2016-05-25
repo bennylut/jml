@@ -5,10 +5,22 @@
  */
 package com.github.bennyl.jml.core.impl.ctx;
 
+import com.google.inject.Key;
+import com.google.inject.Provider;
+import com.google.inject.Scope;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  *
  * @author bennyl
  */
-public class SimpleScope {
-    
+public class SimpleScope implements Scope {
+
+    private ConcurrentHashMap<Key, Provider> scoped = new ConcurrentHashMap<>();
+
+    @Override
+    public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
+        return scoped.computeIfAbsent(key, k -> unscoped);
+    }
+
 }

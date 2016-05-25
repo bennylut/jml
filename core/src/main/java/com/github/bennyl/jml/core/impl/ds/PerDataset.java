@@ -5,10 +5,19 @@
  */
 package com.github.bennyl.jml.core.impl.ds;
 
+import com.google.inject.ScopeAnnotation;
+import static java.lang.annotation.ElementType.*;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+
 /**
  *
  * @author bennyl
  */
+@Target({TYPE, METHOD})
+@Retention(RUNTIME)
+@ScopeAnnotation
 public @interface PerDataset {
-    
+
 }

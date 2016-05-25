@@ -6,6 +6,7 @@
 package com.github.bennyl.jml.alg.models;
 
 import com.github.bennyl.jml.core.Model;
+import com.github.bennyl.jml.core.views.Vector;
 
 /**
  *
@@ -13,14 +14,20 @@ import com.github.bennyl.jml.core.Model;
  */
 public class Clusters implements Model {
 
-    private int[][] rowAssignment;
+    private int[] instancesAssignment;
+    private Vector[] centroids;
 
-    public Clusters(int[][] rowAssignment) {
-        this.rowAssignment = rowAssignment;
+    public Clusters(int[] instancesAssignment, Vector[] centroids) {
+        this.instancesAssignment = instancesAssignment;
+        this.centroids = centroids;
     }
 
-    public int[][] getRowAssignment() {
-        return rowAssignment;
+    public Vector[] getCentroids() {
+        return centroids;
+    }
+
+    public int[] getInstancesAssignment() {
+        return instancesAssignment;
     }
 
 }

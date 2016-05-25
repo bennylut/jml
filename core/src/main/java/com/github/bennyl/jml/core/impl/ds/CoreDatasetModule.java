@@ -5,6 +5,8 @@
  */
 package com.github.bennyl.jml.core.impl.ds;
 
+import com.github.bennyl.jml.core.Dataset;
+import com.github.bennyl.jml.core.impl.ctx.SimpleScope;
 import com.google.inject.AbstractModule;
 
 /**
@@ -13,9 +15,26 @@ import com.google.inject.AbstractModule;
  */
 public class CoreDatasetModule extends AbstractModule {
 
+    private Dataset dataset;
+    private SimpleScope scope = new SimpleScope();
+
+    public CoreDatasetModule(Dataset dataset) {
+        this.dataset = dataset;
+    }
+
+    public CoreDatasetModule(Dataset dataset, SimpleScope datasetScope) {
+        this.dataset = dataset;
+        this.scope = datasetScope;
+    }
+
     @Override
     protected void configure() {
+        bindScope(PerDataset.class, scope);
+        bind(Dataset.class).toInstance(dataset);
+    }
 
+    public SimpleScope getDatasetScope() {
+        return scope;
     }
 
 }

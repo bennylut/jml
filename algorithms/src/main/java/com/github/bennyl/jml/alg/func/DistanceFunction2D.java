@@ -5,7 +5,7 @@
  */
 package com.github.bennyl.jml.alg.func;
 
-import com.github.bennyl.jml.core.Dataset;
+import com.github.bennyl.jml.core.views.Vector;
 import org.apache.commons.math3.util.FastMath;
 
 /**
@@ -14,13 +14,13 @@ import org.apache.commons.math3.util.FastMath;
  */
 public interface DistanceFunction2D {
 
-    double distance(Dataset dataset, int row1, int row2);
+    double distance(Vector v1, Vector v2);
 
     public static DistanceFunction2D euclidian() {
-        return (d, r1, r2) -> {
+        return (v1, v2) -> {
             double dist = 0;
-            for (int i = 0; i < d.size(0); i++) {
-                dist += d.get(r1, i) - d.get(r2, i);
+            for (int i = 0; i < v1.length(); i++) {
+                dist += v1.get(i) - v2.get(i);
             }
 
             return FastMath.sqrt(dist);

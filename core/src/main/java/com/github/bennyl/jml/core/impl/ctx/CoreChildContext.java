@@ -15,15 +15,19 @@ import com.google.inject.Module;
  */
 public class CoreChildContext implements Context {
 
-    private final Injector injector;
+    private Injector injector = null;
 
-    public CoreChildContext(Module... modules) {
+    protected final void initializeContext(Module... modules) {
         this.injector = CoreContext.getInstance().createChildInjector(modules);
     }
 
     @Override
     public <T> T getInstanceOf(Class<T> cls) {
+        if (injector == null) {
+            throw new IllegalStateException("context not initialized");
+        }
+        
         return injector.getInstance(cls);
     }
-    
+
 }
