@@ -28,7 +28,7 @@ public class CoreContext implements Context {
     private CoreContext() {
     }
 
-    public static CoreContext getInstance() {
+    public static CoreContext instance() {
         return INSTANCE;
     }
 

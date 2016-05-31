@@ -18,7 +18,7 @@ public class CoreChildContext implements Context {
     private Injector injector = null;
 
     protected final void initializeContext(Module... modules) {
-        this.injector = CoreContext.getInstance().createChildInjector(modules);
+        this.injector = CoreContext.instance().createChildInjector(modules);
     }
 
     @Override

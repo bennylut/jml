@@ -24,5 +24,10 @@
             <artifactId>algorithms</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>javax</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

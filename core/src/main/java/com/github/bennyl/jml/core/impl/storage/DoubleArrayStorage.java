@@ -68,4 +68,14 @@ public class DoubleArrayStorage implements DoubleStorage {
     public int[] shape() {
         return shape;
     }
+
+    @Override
+    public void reshape(int... shape) {
+        if (shape.length != 1) {
+            throw new IllegalArgumentException("unsutable shape.");
+        }
+
+        this.array = new double[shape[0]];
+        this.shape = shape;
+    }
 }

@@ -69,4 +69,14 @@ public class DoubleMatrixStorage implements DoubleStorage {
         return shape;
     }
 
+    @Override
+    public void reshape(int... shape) {
+        if (shape.length != 2) {
+            throw new IllegalArgumentException("unsutable shape.");
+        }
+
+        this.matrix = new double[shape[0]][shape[1]];
+        this.shape = shape;
+    }
+
 }

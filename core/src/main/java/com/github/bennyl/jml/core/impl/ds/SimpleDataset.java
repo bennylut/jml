@@ -9,6 +9,9 @@ import com.github.bennyl.jml.core.Dataset;
 import com.github.bennyl.jml.core.impl.ctx.CoreChildContext;
 import com.github.bennyl.jml.core.impl.ctx.CoreContext;
 import com.github.bennyl.jml.core.impl.ctx.SimpleScope;
+import com.github.bennyl.jml.core.impl.storage.DoubleArrayStorage;
+import com.github.bennyl.jml.core.impl.storage.DoubleMatrixStorage;
+import com.github.bennyl.jml.core.impl.storage.EmptyDoubleStorage;
 import com.github.bennyl.jml.core.services.SerializationService;
 import com.github.bennyl.jml.core.storage.DoubleStorage;
 import java.io.IOException;
@@ -30,7 +33,8 @@ public class SimpleDataset extends CoreChildContext implements Dataset {
         initializeContext(module);
     }
 
-    private SimpleDataset() {
+    public SimpleDataset() {
+        this(new EmptyDoubleStorage());
     }
 
     @Override
@@ -40,7 +44,7 @@ public class SimpleDataset extends CoreChildContext implements Dataset {
     }
 
     public static SimpleDataset load(InputStream from) {
-        SerializationService ser = CoreContext.getInstance().getInstanceOf(SerializationService.class);
+        SerializationService ser = CoreContext.instance().getInstanceOf(SerializationService.class);
         Object[] parts = ser.deserializeObject(from);
         SimpleDataset dataset = new SimpleDataset();
         dataset.storage = (DoubleStorage) parts[0];
@@ -97,6 +101,19 @@ public class SimpleDataset extends CoreChildContext implements Dataset {
     @Override
     public int[] shape() {
         return storage.shape();
+    }
+
+    @Override
+    public void reshape(int... shape) {
+        if (shape.length == this.shape().length) {
+            this.storage.reshape(shape);
+        } else if (shape.length == 1) {
+            this.storage = new DoubleArrayStorage(new double[shape[0]]);
+        } else if (shape.length == 2) {
+            this.storage = new DoubleMatrixStorage(new double[shape[0]][shape[1]]);
+        } else {
+            throw new UnsupportedOperationException("not supported yet");
+        }
     }
 
 }

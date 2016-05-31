@@ -44,4 +44,6 @@ public interface DoubleStorage {
     double get(int... pos);
 
     int[] shape();
+    
+    void reshape(int... shape);
 }
