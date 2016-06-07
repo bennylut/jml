@@ -5,10 +5,10 @@
  */
 package com.github.bennyl.jml.core.loaders;
 
+import com.github.bennyl.jml.core.Context;
 import com.github.bennyl.jml.core.Dataset;
 import com.github.bennyl.jml.core.impl.ctx.CoreContext;
-import java.io.IOException;
-import java.io.InputStream;
+import com.google.common.reflect.TypeToken;
 
 /**
  *
@@ -16,11 +16,23 @@ import java.io.InputStream;
  */
 public class DatasetLoader {
 
-    public static Dataset load(InputStream input, Class<? extends Dataset> datasetType, Class<? extends SpecificDatasetLoader> loaderType) throws IOException {
-        final CoreContext context = CoreContext.instance();
-        Dataset dataset = context.getInstanceOf(datasetType);
-        SpecificDatasetLoader loader = dataset.getInstanceOf(loaderType);
-        loader.load(input, dataset);
-        return dataset;
+    public static <P extends DatasetLoaderProperties, S extends SpecificDatasetLoader<P>> P of(Dataset dataset, Class<S> loaderType) {
+        TypeToken loaderTypeToken = TypeToken.of(loaderType);
+        TypeToken parametersType = loaderTypeToken.resolveType(SpecificDatasetLoader.class.getTypeParameters()[0]);
+
+        Context context = dataset;
+        
+        if (dataset == null) {
+            context = CoreContext.instance();
+        }
+        
+        SpecificDatasetLoader loader = context.getInstanceOf(loaderType);
+        P props = (P) context.getInstanceOf(parametersType.getRawType());
+        props.initialize(dataset, loader);
+        return props;
+    }
+
+    public static <P extends DatasetLoaderProperties, S extends SpecificDatasetLoader<P>> P of(Class<S> loaderType) {
+        return of(null, loaderType);
     }
 }

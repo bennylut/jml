@@ -6,7 +6,7 @@
 package com.github.bennyl.jml.alg.models;
 
 import com.github.bennyl.jml.core.Model;
-import com.github.bennyl.jml.core.views.Vector;
+import com.github.bennyl.jml.core.Vector;
 
 /**
  *

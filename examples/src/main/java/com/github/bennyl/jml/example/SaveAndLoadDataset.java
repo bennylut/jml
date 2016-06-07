@@ -5,36 +5,29 @@
  */
 package com.github.bennyl.jml.example;
 
-import com.github.bennyl.jml.core.Dataset;
-import com.github.bennyl.jml.core.impl.ds.SimpleDataset;
-import com.github.bennyl.jml.core.impl.storage.DoubleArrayStorage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 /**
  *
  * @author bennyl
  */
 public class SaveAndLoadDataset {
 
-    public static void main(String[] args) throws IOException {
-        Dataset dataset = new SimpleDataset(new DoubleArrayStorage(new double[100]));
-        for (int i = 0; i < dataset.size(); i++) {
-            dataset.put(i, i);
-        }
-
-        double before = dataset.sum();
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        dataset.save(out);
-        out.close();
-
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        dataset = SimpleDataset.load(in);
-
-        double after = dataset.sum();
-
-        System.out.println("before: " + before + ", after: " + after);
-    }
+//    public static void main(String[] args) throws IOException {
+//        Dataset dataset = new SimpleDataset(new DoubleArrayStorage(new double[100]));
+//        for (int i = 0; i < dataset.size(); i++) {
+//            dataset.put(i, i);
+//        }
+//
+//        double before = dataset.sum();
+//
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        dataset.save(out);
+//        out.close();
+//
+//        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+//        dataset = SimpleDataset.load(in);
+//
+//        double after = dataset.sum();
+//
+//        System.out.println("before: " + before + ", after: " + after);
+//    }
 }

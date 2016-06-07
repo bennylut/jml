@@ -5,7 +5,7 @@
  */
 package com.github.bennyl.jml.alg.func;
 
-import com.github.bennyl.jml.core.views.Vector;
+import com.github.bennyl.jml.core.Vector;
 import org.apache.commons.math3.util.FastMath;
 
 /**
@@ -20,7 +20,7 @@ public interface DistanceFunction2D {
         return (v1, v2) -> {
             double dist = 0;
             for (int i = 0; i < v1.length(); i++) {
-                dist += v1.get(i) - v2.get(i);
+                dist += v1.getDouble(i) - v2.getDouble(i);
             }
 
             return FastMath.sqrt(dist);

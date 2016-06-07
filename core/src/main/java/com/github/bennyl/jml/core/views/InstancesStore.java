@@ -5,18 +5,21 @@
  */
 package com.github.bennyl.jml.core.views;
 
-import com.github.bennyl.jml.core.impl.ds.PerDataset;
-import com.github.bennyl.jml.core.impl.views.GenericInstanceStore;
+import com.github.bennyl.jml.core.Vector;
+import com.github.bennyl.jml.core.impl.views.SimpleInstanceStore;
 import com.google.inject.ImplementedBy;
 import java.util.Iterator;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
+ * a view of a dataset that assume the following: dataset is composed from rows,
+ * each represents a single instance. each row is composed from values of
+ * features
  *
  * @author bennyl
  */
-@ImplementedBy(GenericInstanceStore.class)
+@ImplementedBy(SimpleInstanceStore.class)
 public interface InstancesStore extends Iterable<Vector> {
 
     Vector instance(int i);
@@ -27,9 +30,19 @@ public interface InstancesStore extends Iterable<Vector> {
 
     int numFeatures();
 
-    Object id(int i);
+    /**
+     * @param i instance number
+     * @return the metadata of the given instance number
+     */
+    Object metadata(int i);
 
-    void id(int i, Object id);
+    /**
+     * sets the metadata of the given instance number
+     *
+     * @param i the instance number
+     * @param meta the metadata to set
+     */
+    void metadata(int i, Object meta);
 
     @Override
     default Iterator<Vector> iterator() {

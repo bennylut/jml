@@ -37,8 +37,13 @@ public class CoreContext implements Context {
     }
 
     @Override
-    public <T> T getInstanceOf(Class<T> cls) {
-        return injector.getInstance(cls);
+    public Context parent() {
+        return this;
+    }
+
+    @Override
+    public Injector injector() {
+        return this.injector;
     }
 
 }

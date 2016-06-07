@@ -5,11 +5,26 @@
  */
 package com.github.bennyl.jml.core;
 
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+
 /**
  *
  * @author bennyl
  */
 public interface Context {
 
-    <T> T getInstanceOf(Class<T> cls);
+    Context parent();
+
+    default Injector injector() {
+        return parent().injector();
+    }
+
+    default <T> T getInstanceOf(Class<T> cls) {
+        return injector().getInstance(cls);
+    }
+
+    default <T> Provider<T> getProviderOf(Class<T> cls) {
+        return injector().getProvider(cls);
+    }
 }

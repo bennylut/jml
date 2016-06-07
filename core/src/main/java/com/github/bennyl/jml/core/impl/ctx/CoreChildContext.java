@@ -13,7 +13,7 @@ import com.google.inject.Module;
  *
  * @author bennyl
  */
-public class CoreChildContext implements Context {
+public abstract class CoreChildContext implements Context {
 
     private Injector injector = null;
 
@@ -22,12 +22,8 @@ public class CoreChildContext implements Context {
     }
 
     @Override
-    public <T> T getInstanceOf(Class<T> cls) {
-        if (injector == null) {
-            throw new IllegalStateException("context not initialized");
-        }
-        
-        return injector.getInstance(cls);
+    public Injector injector() {
+        return injector;
     }
 
 }

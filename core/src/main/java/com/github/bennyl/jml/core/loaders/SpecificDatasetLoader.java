@@ -5,7 +5,7 @@
  */
 package com.github.bennyl.jml.core.loaders;
 
-import com.github.bennyl.jml.core.storage.DoubleStorage;
+import com.github.bennyl.jml.core.Dataset;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,7 +13,7 @@ import java.io.InputStream;
  *
  * @author bennyl
  */
-public interface SpecificDatasetLoader {
+public interface SpecificDatasetLoader<P extends DatasetLoaderProperties> {
 
-    void load(InputStream in, DoubleStorage storage) throws IOException;
+    Dataset load(P properties, Dataset dataset, InputStream input) throws IOException;
 }

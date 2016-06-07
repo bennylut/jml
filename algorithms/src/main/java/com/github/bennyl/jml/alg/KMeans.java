@@ -10,17 +10,15 @@ import com.github.bennyl.jml.alg.models.Clusters;
 import com.github.bennyl.jml.core.Dataset;
 import com.github.bennyl.jml.core.Learner;
 import com.github.bennyl.jml.core.LearnerParams;
-import com.github.bennyl.jml.core.views.DoubleArrayVector;
+import com.github.bennyl.jml.core.Table;
+import com.github.bennyl.jml.core.Vector;
+import com.github.bennyl.jml.core.impl.ds.DoubleArrayVector;
 import com.github.bennyl.jml.core.views.InstancesStore;
-import com.github.bennyl.jml.core.views.Vector;
 import com.github.bennyl.jml.utils.MathUtil;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntCollection;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntList;
 import static java.lang.Double.POSITIVE_INFINITY;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -106,7 +104,7 @@ public class KMeans implements Learner<KMeans.Params, Clusters> {
             }
             centroids[i] = cluster.centroid;
         }
-        
+
         return new Clusters(instanceAssignement, centroids);
     }
 
@@ -148,12 +146,10 @@ public class KMeans implements Learner<KMeans.Params, Clusters> {
             if (maxIterations <= 0) {
                 errors.append("maxIterations must be larger than 0\n");
             }
-            if (dataset.dimensions() != 2) {
-                errors.append("only support datasets with 2 dimentions");
-            }
 
-            if (dataset.size(0) < k) {
-                k = dataset.size(0);
+            final Table table = dataset.asTable();
+            if (table.numRows() < k) {
+                k = table.numRows();
             }
 
             return errors.length() == 0 ? null : errors.toString();
@@ -164,10 +160,10 @@ public class KMeans implements Learner<KMeans.Params, Clusters> {
 
         double fitness = 0;
         IntList instances = new IntArrayList();
-        DoubleArrayVector centroid;
+        Vector centroid;
 
         public Cluster(Vector centroid) {
-            this.centroid = new DoubleArrayVector(centroid);
+            this.centroid = centroid.copy();
         }
 
         private void adjust(InstancesStore instancesStore) {
@@ -180,12 +176,11 @@ public class KMeans implements Learner<KMeans.Params, Clusters> {
             centroid.divideBy(instances.size());
 
             fitness = 0;
-            double[] centArray = centroid.getArray();
 
             for (int i = 0; i < instances.size(); i++) {
                 Vector v = instancesStore.instance(instances.getInt(i));
                 for (int j = 0; j < centroid.length(); j++) {
-                    double dif = centArray[j] - v.get(j);
+                    double dif = centroid.getDouble(j) - v.getDouble(j);
                     fitness += dif * dif;
                 }
             }

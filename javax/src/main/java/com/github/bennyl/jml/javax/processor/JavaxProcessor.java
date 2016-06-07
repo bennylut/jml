@@ -30,11 +30,7 @@ import javax.tools.StandardLocation;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import spoon.compiler.Environment;
 import spoon.reflect.cu.CompilationUnit;
-import spoon.reflect.visitor.DefaultJavaPrettyPrinter;
-import spoon.reflect.visitor.PrettyPrinter;
-import spoon.support.JavaOutputProcessor;
 
 /**
  *
@@ -43,15 +39,15 @@ import spoon.support.JavaOutputProcessor;
 @AutoService(Processor.class)
 public class JavaxProcessor extends AbstractProcessor {
 
+    boolean activated = false;
+
     File srcPath = null;
-
-    public static void main(String[] args) throws IOException {
-        String test = "public class X{ private int i; }";
-
-    }
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
+        if (!activated) {
+            return Collections.EMPTY_SET;
+        }
         return Collections.singleton("*"); //always call me!
     }
 
@@ -82,12 +78,10 @@ public class JavaxProcessor extends AbstractProcessor {
             JavaXParser parser = new JavaXParser(tokens);
             ParseTree tree = parser.compilationUnit(); // parse; start at prog
 
-            
-            
             //CodeGenerationVisitor visitor = new CodeGenerationVisitor(processingEnv);
             SpoonASTParser visitor = new SpoonASTParser();
             CompilationUnit result = (CompilationUnit) visitor.visit(tree);
-            
+
             System.out.println("got: \n" + visitor.toString(result));
         }
     }

@@ -16,6 +16,8 @@ public interface DoubleStorage {
     void put(int i, int j, double value);
 
     void put(int[] indexes, double value);
+    
+    
 
     /**
      * @return the total number of cells in the dataset
