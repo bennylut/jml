@@ -36,7 +36,7 @@ public class SimpleInstanceStore implements InstancesStore {
 
     @Override
     public double value(int i, int j) {
-        return dataset.get(i, j);
+        return dataset.getDouble(i, j);
     }
 
     @Override

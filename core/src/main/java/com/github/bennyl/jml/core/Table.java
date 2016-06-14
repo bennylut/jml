@@ -5,7 +5,10 @@
  */
 package com.github.bennyl.jml.core;
 
+import com.github.bennyl.jml.core.services.DatasetMetadataService;
 import java.io.PrintStream;
+import java.util.Objects;
+import java.util.function.Supplier;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
@@ -28,7 +31,22 @@ public interface Table extends Dataset {
 
     void appendColumn(Vector v);
 
-    void set(int i, int j, double v);
+    void setDouble(int i, int j, double v);
+
+    /**
+     * @param row
+     * @param col
+     * @return the value at {@code row\col}
+     */
+    double getDouble(int row, int col);
+
+    default long getLong(int row, int col) {
+        return (long) getDouble(row, col);
+    }
+
+    default void setLong(int row, int col, long v) {
+        setDouble(row, col, v);
+    }
 
     default StreamEx<Vector> rows() {
         return IntStreamEx.range(0, numRows()).mapToObj(this::row);
@@ -36,25 +54,6 @@ public interface Table extends Dataset {
 
     default StreamEx<Vector> cols() {
         return IntStreamEx.range(0, numCols()).mapToObj(this::col);
-    }
-
-    /**
-     * @param row
-     * @param col
-     * @return the value at {@code row\col}
-     */
-    double get(int row, int col);
-
-    default Table setRow(int i, double... colValues) {
-        if (colValues.length != numCols()) {
-            throw new UnsupportedOperationException("num given columns differ from num columns in table");
-        }
-
-        for (int j = 0; j < colValues.length; j++) {
-            set(i, j, colValues[j]);
-        }
-
-        return this;
     }
 
     @Override
@@ -78,6 +77,92 @@ public interface Table extends Dataset {
             row.print(out);
             out.println();
         }
+    }
+
+    default void setRowId(int row, Object id) {
+        getInstanceOf(DatasetMetadataService.class).store(new RowVectorMetaKey(id), () -> row(row));
+    }
+
+    default Vector rowById(Object id) {
+        return getInstanceOf(DatasetMetadataService.class).fetch(new ColumnVectorMetaKey(id)).get();
+    }
+
+    default void setColId(int row, Object id) {
+        getInstanceOf(DatasetMetadataService.class).store(new ColumnVectorMetaKey(id), () -> col(row));
+    }
+
+    default Vector colById(Object id) {
+        return getInstanceOf(DatasetMetadataService.class).fetch(new RowVectorMetaKey(id)).get();
+    }
+
+    public static class RowVectorMetaKey implements DatasetMetadataService.MetaKey<Supplier<Vector>> {
+
+        private Object id;
+
+        public RowVectorMetaKey(Object id) {
+            this.id = id;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 67 * hash + Objects.hashCode(this.id);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final RowVectorMetaKey other = (RowVectorMetaKey) obj;
+            if (!Objects.equals(this.id, other.id)) {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
+    public static class ColumnVectorMetaKey implements DatasetMetadataService.MetaKey<Supplier<Vector>> {
+
+        private Object id;
+
+        public ColumnVectorMetaKey(Object id) {
+            this.id = id;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 67 * hash + Objects.hashCode(this.id);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final RowVectorMetaKey other = (RowVectorMetaKey) obj;
+            if (!Objects.equals(this.id, other.id)) {
+                return false;
+            }
+            return true;
+        }
+
     }
 
 }

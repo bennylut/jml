@@ -57,12 +57,12 @@ public class ColumnBasedTable implements Table {
     }
 
     @Override
-    public void set(int i, int j, double v) {
+    public void setDouble(int i, int j, double v) {
         col(j).setDouble(i, v);
     }
 
     @Override
-    public double get(int i, int j) {
+    public double getDouble(int i, int j) {
         return col(j).getDouble(i);
     }
 

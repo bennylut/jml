@@ -6,6 +6,8 @@
 package com.github.bennyl.jml.core.loaders;
 
 import com.github.bennyl.jml.core.Dataset;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,7 +15,19 @@ import java.io.InputStream;
  *
  * @author bennyl
  */
-public interface SpecificDatasetLoader<P extends DatasetLoaderProperties> {
+public interface SpecificDatasetLoader {
 
-    Dataset load(P properties, Dataset dataset, InputStream input) throws IOException;
+    default Dataset load(InputStream input) throws IOException {
+        throw new UnsupportedOperationException("loading from input stream is not supported for this loader type");
+    }
+
+    default Dataset load(File input) throws IOException {
+        if (input.isDirectory()) {
+            throw new UnsupportedOperationException("loading from directory is not supported for this loader type");
+        }
+
+        try (FileInputStream fis = new FileInputStream(input)) {
+            return load(fis);
+        }
+    }
 }

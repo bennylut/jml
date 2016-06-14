@@ -7,9 +7,7 @@ package com.github.bennyl.jml.core.loaders.common;
 
 import com.github.bennyl.jml.core.Dataset;
 import com.github.bennyl.jml.core.Table;
-import com.github.bennyl.jml.core.impl.ds.DoubleArrayVector;
 import com.github.bennyl.jml.core.impl.ds.SimpleDataset;
-import com.github.bennyl.jml.core.loaders.DatasetLoaderProperties;
 import com.github.bennyl.jml.core.loaders.SpecificDatasetLoader;
 import com.github.bennyl.jml.core.services.VectorBuilder;
 import java.io.IOException;
@@ -28,21 +26,32 @@ import java.util.List;
  *
  * @author bennyl
  */
-public class Csv implements SpecificDatasetLoader<Csv.CsvLoaderProperties> {
+public class Csv implements SpecificDatasetLoader {
+
+    private CSVFormat format = CSVFormat.DEFAULT;
+    private boolean containHeaders = true;
+
+    public Csv format(final CSVFormat value) {
+        this.format = value;
+        return this;
+    }
+
+    public Csv containHeaders(final boolean value) {
+        this.containHeaders = value;
+        return this;
+    }
 
     @Override
-    public Dataset load(CsvLoaderProperties properties, Dataset dataset, InputStream input) throws IOException {
-        if (dataset == null) {
-            dataset = new SimpleDataset(0, 0);
-        }
+    public Dataset load(InputStream input) throws IOException {
+        Dataset dataset = new SimpleDataset(0, 0);
 
         Table table = dataset.asTable();
         List<VectorBuilder> columnBuilders = new ArrayList<>();
 
         try (Reader r = new InputStreamReader(input)) {
-            Iterator<CSVRecord> iter = properties.format.parse(r).iterator();
+            Iterator<CSVRecord> iter = format.parse(r).iterator();
 
-            if (properties.containHeaders && iter.hasNext()) {
+            if (containHeaders && iter.hasNext()) {
                 CSVRecord headers = iter.next();
                 TableMetadata metaStore = dataset.getInstanceOf(TableMetadata.class);
                 for (int i = 0; i < headers.size(); i++) {
@@ -74,23 +83,6 @@ public class Csv implements SpecificDatasetLoader<Csv.CsvLoaderProperties> {
 
             return table;
         }
-    }
-
-    public static class CsvLoaderProperties extends DatasetLoaderProperties {
-
-        private CSVFormat format = CSVFormat.DEFAULT;
-        private boolean containHeaders = true;
-
-        public CsvLoaderProperties format(CSVFormat format) {
-            this.format = format;
-            return this;
-        }
-
-        public CsvLoaderProperties containHeaders(boolean containHeaders) {
-            this.containHeaders = containHeaders;
-            return this;
-        }
-
     }
 
 }

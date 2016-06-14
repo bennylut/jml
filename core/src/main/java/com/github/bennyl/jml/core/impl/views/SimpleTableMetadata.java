@@ -6,6 +6,7 @@
 package com.github.bennyl.jml.core.impl.views;
 
 import com.github.bennyl.jml.core.impl.ds.PerDataset;
+import com.github.bennyl.jml.core.services.DatasetMetadataService;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import com.github.bennyl.jml.core.views.TableMetadata;
@@ -13,7 +14,9 @@ import com.github.bennyl.jml.core.views.TableMetadata;
 /**
  *
  * @author bennyl
+ * @deprecated replaced with {@link  DatasetMetadataService}
  */
+@Deprecated
 @PerDataset
 public class SimpleTableMetadata<R, C> implements TableMetadata<R, C> {
 

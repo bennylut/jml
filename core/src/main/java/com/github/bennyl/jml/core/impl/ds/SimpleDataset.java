@@ -45,6 +45,17 @@ public class SimpleDataset extends CoreChildContext implements Dataset {
         initializeContext(module);
     }
 
+    /**
+     * this is NOT a copy constructor
+     *
+     * @param internalRepresentation
+     */
+    public SimpleDataset(Dataset internalRepresentation) {
+        this.module = new CoreDatasetModule(this);
+        this.internalRepresentation = internalRepresentation;
+        initializeContext(module);
+    }
+
 //    @Override
 //    public void save(OutputStream out) throws IOException {
 //        SerializationService ser = getInstanceOf(SerializationService.class);

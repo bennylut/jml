@@ -6,9 +6,7 @@
 package com.github.bennyl.jml.core.loaders;
 
 import com.github.bennyl.jml.core.Context;
-import com.github.bennyl.jml.core.Dataset;
 import com.github.bennyl.jml.core.impl.ctx.CoreContext;
-import com.google.common.reflect.TypeToken;
 
 /**
  *
@@ -16,23 +14,10 @@ import com.google.common.reflect.TypeToken;
  */
 public class DatasetLoader {
 
-    public static <P extends DatasetLoaderProperties, S extends SpecificDatasetLoader<P>> P of(Dataset dataset, Class<S> loaderType) {
-        TypeToken loaderTypeToken = TypeToken.of(loaderType);
-        TypeToken parametersType = loaderTypeToken.resolveType(SpecificDatasetLoader.class.getTypeParameters()[0]);
-
-        Context context = dataset;
-        
-        if (dataset == null) {
-            context = CoreContext.instance();
-        }
-        
-        SpecificDatasetLoader loader = context.getInstanceOf(loaderType);
-        P props = (P) context.getInstanceOf(parametersType.getRawType());
-        props.initialize(dataset, loader);
-        return props;
+    public static <S extends SpecificDatasetLoader> S of(Class<S> loaderType) {
+        Context context = CoreContext.instance();
+        S loader = context.getInstanceOf(loaderType);
+        return loader;
     }
 
-    public static <P extends DatasetLoaderProperties, S extends SpecificDatasetLoader<P>> P of(Class<S> loaderType) {
-        return of(null, loaderType);
-    }
 }

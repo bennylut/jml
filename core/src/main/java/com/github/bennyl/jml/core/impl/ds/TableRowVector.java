@@ -33,12 +33,12 @@ public class TableRowVector implements Vector {
 
     @Override
     public double getDouble(int i) {
-        return table.get(index, i);
+        return table.getDouble(index, i);
     }
 
     @Override
     public void setDouble(int i, double v) {
-        table.set(index, i, v);
+        table.setDouble(index, i, v);
     }
 
     @Override
